@@ -1,0 +1,9 @@
+.menu-button {
+    padding: 15px 25px;
+    font-size: 18px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.menu-button:hover {
+    transform: scale(1.1);
+}

@@ -14,10 +14,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_SPECIAL_CHARS);
 
     if (verificar_usuario($username, $senha)) {
-        $_SESSION['username'] = $username;
-        echo json_encode(['status' => 'success']);
-    } else {
-        echo json_encode(['status' => 'error', 'message' => 'Usuário ou senha inválidos.']);
+        
+        $usuario_id = retorna_usuario_id($username);
+
+        if ($usuario_id) {
+            $_SESSION['usuario_id'] = $usuario_id;
+            $_SESSION['username'] = $username;
+            echo json_encode(['status' => 'success']);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Usuário ou senha inválidos.']);
+        }
+        exit;
     }
-    exit;
 }

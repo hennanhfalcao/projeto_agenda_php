@@ -34,19 +34,20 @@ function verificar_usuario($username, $senha) {
         $conn->close();
     }
 }
-function salvar_contato($nome, $telefone, $email, $usuario_id){
-    #Conecta ao banco de dados e insere um contato na tabela contatos
+function salvar_contato($nome, $telefone, $email, $usuario_id) {
     $conn = conectar_banco();
     try {
         $stmt = $conn->prepare("INSERT INTO contatos (nome, telefone, email, usuario_id) VALUES (?, ?, ?, ?)");
         $stmt->bind_param("sssi", $nome, $telefone, $email, $usuario_id);
         $stmt->execute();
-        echo "Contato salvo com sucesso!";
-    } catch(mysqli_sql_exception $e) {
-        echo "Erro ao salvar contato". $e->getMessage();
+        return true;
+    } catch (mysqli_sql_exception $e) {
+        echo "Erro ao salvar contato: " . $e->getMessage();
+        return false;
     } finally {
-        $stmt->close();
-        #fecha a conexão com o banco de dados
+        if ($stmt) {
+            $stmt->close();
+        }
         $conn->close();
     }
 }
@@ -73,6 +74,29 @@ function retorna_id($nome, $usuario_id) {
     } catch(mysqli_sql_exception $e) {
         echo 'Erro ao buscar ID do contato: '. $e->getMessage();
         return false;
+    } finally {
+        $stmt->close();
+        $conn->close();
+    }
+}
+
+function retorna_usuario_id($username) {
+    $conn = conectar_banco();
+    try {
+        $stmt = $conn->prepare("SELECT id FROM usuarios WHERE username = ?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            return $row['id'];
+        } else {
+            return null;
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo 'Erro ao obter ID do usuário: ' . $e->getMessage();
+        return null;
     } finally {
         $stmt->close();
         $conn->close();
@@ -106,17 +130,18 @@ function atualizar_contato($id, $nome, $telefone, $email, $usuario_id) {
     $conn = conectar_banco();
     try {
         $stmt = $conn->prepare("UPDATE contatos SET nome = ?, telefone = ?, email = ? WHERE id = ? AND usuario_id = ?");
-        $stmt->bind_param("sssi", $nome, $telefone, $email, $i, $usuario_id);
+        $stmt->bind_param("sssii", $nome, $telefone, $email, $id, $usuario_id);
         $stmt->execute();
         echo "Contato atualizado com sucesso";
     } catch (mysqli_sql_exception $e) {
         echo "Erro ao atualizar contato: " . $e->getMessage();
     } finally {
-        $stmt->close();
+        if ($stmt) {
+            $stmt->close();
+        }
         $conn->close();
     }
 }
-
 function apagar_contato($id, $usuario_id) {
     $conn = conectar_banco();
 
