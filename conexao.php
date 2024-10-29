@@ -3,7 +3,7 @@ function conectar_banco() {
     $servername = "localhost";
     $login = "root";
     $password = "";
-    $db_name = "contatos";
+    $db_name = "mysql";
 
     $conn = new mysqli($servername, $login, $password, $db_name);
     if ($conn->connect_error) {

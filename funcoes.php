@@ -1,20 +1,16 @@
 <?php
-require 'conexao.php';
+require_once 'conexao.php';
 
 function cadastra_usuario($username, $nome, $senha, $telefone, $email) {
     $conn = conectar_banco();
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-    try {
-        $stmt = $conn->prepare("INSERT INTO usuarios(username, nome, senha, telefone, email) VALUES (?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssss", $username, $nome, $senha_hash, $telefone, $email);
-        $stmt->execute();
-        echo "Contato salvo com sucesso";
-    } catch(mysqli_sql_exception $e) {
-        echo "Erro ao salvar contato". $e->getMessage();
-    } finally {
-        $stmt->close();
-        $conn->close();
-    }
+    $stmt = $conn->prepare("INSERT INTO usuarios (username, nome, senha, telefone, email) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $username, $nome, $senha, $telefone, $email);
+
+    $resultado = $stmt->execute();
+    $stmt->close();
+    $conn->close();
+
+    return $resultado;
 }
 
 function verificar_usuario($username, $senha) {
