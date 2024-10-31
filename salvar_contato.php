@@ -26,7 +26,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (salvar_contato($nome, $telefone, $email, $usuario_id)) {
-        echo json_encode(["status"=> "success","message"=> "Contato cadastrado com sucesso!"]);
+        header("Location: home.php");
+        exit;
     } else {
         echo json_encode(["status"=> "error","message"=> "Ocorreu um erro ao cadastrar o contato."]);
     }
