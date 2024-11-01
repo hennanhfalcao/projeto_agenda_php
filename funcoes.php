@@ -107,11 +107,11 @@ function buscar_contato_por_nome_e_usuario($nome, $usuario_id) {
     $conn = conectar_banco();
     
     try {
-        $stmt = $conn->prepare("SELECT * FROM contatos WHERE nome LIKE ? AND usuario_id = ?");
-        $nome_wildcard = "%nome%";
-        $stmt->bind_param("si", $nome_wildcard, $usuario_id);
+        $stmt = $conn->prepare("SELECT * FROM contatos WHERE nome LIKE CONCAT('%', ?, '%') AND usuario_id = ?");
+        $stmt->bind_param("si", $nome, $usuario_id);
         $stmt->execute();
         $result = $stmt->get_result();
+        
         $contatos_encontrados = [];
         while ($row = $result->fetch_assoc()) {
             $contatos_encontrados[] = $row;
