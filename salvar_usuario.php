@@ -1,29 +1,30 @@
 <?php
+header('Content-Type: application/json');
 require_once 'conexao.php';
 require_once 'funcoes.php';
 
 session_start();
 
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    // Captura e valida todos os campos de uma vez
     $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_STRING);
-    $email = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
-    $senha = password_hash(filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING), PASSWORD_DEFAULT);
-    $telefone = filter_var($_POST['telefone'], FILTER_SANITIZE_NUMBER_INT);
+    $email = filter_var($_POST["email"] ?? null, FILTER_VALIDATE_EMAIL);
+    $senha = filter_input(INPUT_POST, "senha", FILTER_SANITIZE_STRING);
+    $telefone = filter_input(INPUT_POST, "telefone", FILTER_SANITIZE_STRING);
 
-    if (!$username || !$nome || !$email || !$senha) {
-        echo "Todos os campos são obrigatórios";
+    if (!$username || !$nome || !$email || !$senha || !$telefone) {
+        echo json_encode(["status" => "error", "message" => "Todos os campos são obrigatórios"]);
         exit;
     }
 
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "E-mail inválido";
-        exit;
-    }
+    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
 
-    if (cadastra_usuario($username, $nome, $senha, $telefone, $email)) {
-        echo 'Usuário cadastrado com sucesso!';
+    $resultado = cadastra_usuario($username, $nome, $senha_hash, $telefone, $email);
+
+    if ($resultado) {
+        echo json_encode(["status" => "success", "message" => "Usuário cadastrado com sucesso!"]);
     } else {
-        echo 'Ocorreu um erro ao cadastrar o usuário.';
+        echo json_encode(["status" => "error", "message" => "Ocorreu um erro ao cadastrar o usuário."]);
     }
 }
