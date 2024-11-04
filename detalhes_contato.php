@@ -4,7 +4,7 @@ require_once 'funcoes.php';
 
 if (isset($_GET['id'])) {
     $contato_id = $_GET['id'];
-    $usuario_id = $_SESSION['usuario_id']; // Supondo que o ID do usuário esteja salvo na sessão
+    $usuario_id = $_SESSION['usuario_id']; 
 
     $conn = conectar_banco();
     $stmt = $conn->prepare("SELECT * FROM contatos WHERE id = ? AND usuario_id = ?");

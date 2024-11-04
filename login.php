@@ -7,7 +7,7 @@ require_once 'conexao.php';
 require_once 'funcoes.php';
 session_start();
 
-header('Content-Type: application/json'); // Define o cabeçalho JSON
+header('Content-Type: application/json');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = filter_input(INPUT_POST, 'username', FILTER_SANITIZE_SPECIAL_CHARS);

@@ -30,14 +30,14 @@
     })
     .then(response => {
         if (response.redirected) {
-            // Redirecionamento bem-sucedido
+
             window.location.href = response.url;
         } else {
             return response.json();
         }
     })
     .then(data => {
-        if (data) { // Se não houve redirecionamento, processa o JSON
+        if (data) { 
             if (data.status === 'success') {
                 alert(data.message);
             } else {
