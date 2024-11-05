@@ -1,0 +1,90 @@
+<div class="container mt-4">
+
+    <div class="text-center mb-4">
+        <label for="uploadImage" class="btn btn-outline-primary p-0 rounded-circle" style="width: 100px; height: 100px; overflow: hidden; display: inline-block;">
+            <img src="caminho_da_imagem_de_perfil.jpg" id="profileImage" alt="Foto de Perfil" class="img-fluid" style="width: 100%; height: 100%; object-fit: cover;">
+            <input type="file" id="uploadImage" accept="image/*" style="display: none;">
+        </label>
+    </div>
+
+    <form id="formPerfil">
+        <div class="mb-3">
+            <label for="username" class="form-label">Nome de Usuário</label>
+            <input type="text" class="form-control" id="username" value="Nome do Usuário" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" class="form-control" id="email" value="email@exemplo.com" readonly>
+        </div>
+        <div class="mb-3">
+            <label for="telefone" class="form-label">Telefone</label>
+            <input type="tel" class="form-control" id="telefone" value="(11) 1234-5678" readonly>
+        </div>
+
+        <div class="text-end">
+            <button type="button" id="editarPerfil" class="btn btn-primary">Editar</button>
+            <button type="button" id="salvarPerfil" class="btn btn-success d-none">Salvar</button>
+            <button type="button" id="cancelarEdicao" class="btn btn-secondary d-none">Cancelar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+
+        $('#editarPerfil').on('click', function() {
+            $('#username, #email, #telefone').prop('readonly', false);
+            $('#editarPerfil').addClass('d-none');
+            $('#salvarPerfil, #cancelarEdicao').removeClass('d-none');
+        });
+    
+
+        $('#cancelarEdicao').on('click', function() {
+            $('#username, #email, #telefone').prop('readonly', true);
+            $('#salvarPerfil, #cancelarEdicao').addClass('d-none');
+            $('#editarPerfil').removeClass('d-none');
+
+        });
+
+        $('#salvarPerfil').on('click', function() {
+            const username = $('#username').val();
+            const email = $('#email').val();
+            const telefone = $('#telefone').val();
+            
+            $.ajax({
+                url: 'atualizar_perfil.php',
+                type: 'POST',
+                data: { username, email, telefone },
+                success: function(response) {
+                    alert('Perfil atualizado com sucesso!');
+                    $('#username, #email, #telefone').prop('readonly', true);
+                    $('#salvarPerfil, #cancelarEdicao').addClass('d-none');
+                    $('#editarPerfil').removeClass('d-none');
+                },
+                error: function() {
+                    alert('Erro ao atualizar o perfil.');
+                }
+            });
+        });
+
+        $('#uploadImage').on('change', function() {
+            const formData = new FormData();
+            formData.append('image', this.files[0]);
+    
+            $.ajax({
+                url: 'atualizar_imagem_perfil.php',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    $('#profileImage').attr('src', response.imageUrl || 'caminho_da_nova_imagem.jpg');
+                    alert('Imagem de perfil atualizada com sucesso!');
+                },
+                error: function() {
+                    alert('Erro ao atualizar a imagem de perfil.');
+                }
+            });
+        });
+    });
+    </script>

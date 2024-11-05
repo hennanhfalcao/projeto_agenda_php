@@ -7,3 +7,8 @@
 .menu-button:hover {
     transform: scale(1.1);
 }
+
+#resultadosListaContatos {
+    max-height: 300px;
+    overflow-y: auto;
+}

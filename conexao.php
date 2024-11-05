@@ -28,6 +28,7 @@ function conectar_banco() {
         senha VARCHAR(255) NOT NULL,
         email VARCHAR(100) NOT NULL,
         telefone VARCHAR(20),
+        imagem VARCHAR(255),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )";
 

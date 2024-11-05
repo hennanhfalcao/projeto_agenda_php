@@ -3,7 +3,7 @@ require_once 'conexao.php';
 
 function cadastra_usuario($username, $nome, $senha, $telefone, $email) {
     $conn = conectar_banco();
-    $stmt = $conn->prepare("INSERT INTO usuarios (username, nome, senha, telefone, email) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO usuarios (username, nome, senha, telefone, email, imagem) VALUES (?, ?, ?, ?, ?, NULL)");
     $stmt->bind_param("sssss", $username, $nome, $senha, $telefone, $email);
 
     $resultado = $stmt->execute();
@@ -168,36 +168,58 @@ function apagar_contato($id, $usuario_id) {
 
 function listar_contatos_usuario($usuario_id) {
     $conn = conectar_banco();
-    try {
-        $stmt = $conn->prepare("SELECT * FROM contatos WHERE usuario_id = ?");
-        $stmt->bind_param("i", $usuario_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
+    $stmt = $conn->prepare("SELECT * FROM contatos WHERE usuario_id = ?");
+    $stmt ->bind_param("i", $usuario_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-        if ($result->num_rows > 0) {
-            if ($result->num_rows > 0) {
-                echo "<table class='table table-striped table-bordered'>";
-                echo "<thead><tr><th>ID</th><th>Nome</th><th>Telefone</th><th>Email</th><th>Ações</th></tr></thead>";
-                echo "<tbody>";
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["id"] . "</td>";
-                    echo "<td>" . $row["nome"] . "</td>";
-                    echo "<td>" . $row["telefone"] . "</td>";
-                    echo "<td>" . $row["email"] . "</td>";
-                    echo "<td><a href='editar.php?id=" . $row["id"] . "' class='btn btn-primary btn-sm'>Editar</a> <a href='apagar.php?id=" . $row["id"] . "' class='btn btn-danger btn-sm'>Apagar</a></td>";
-                    echo "</tr>";
-                }
-                echo "</tbody></table>";
-            } else {
-                echo "<p class='text-center'>Nenhum contato encontrado.</p>";
-            }
-        } 
-    } catch (mysqli_sql_exception $e) {
-            echo "Erro ao listar contatos: " . $e->getMessage();
-        } finally {
-            $stmt->close();
-            $conn->close();
-        }
+    $contatos = [];
+    while ($row = $result->fetch_assoc()) {
+        $contatos[] = $row;
     }
-?>
+    return json_encode($contatos);
+}
+
+function atualizar_imagem_usuario($usuario_id, $imagem_caminho) {
+    $conn = conectar_banco();
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET imagem = ? WHERE id = ?");
+        $stmt->bind_param("si", $imagem_caminho, $usuario_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            echo "Imagem do perfil atualizada com sucesso.";
+            return true;
+        } else {
+            echo "Erro ao atualizar imagem do perfil.";
+            return false;
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo "Erro ao atualizar imagem do perfil: " . $e->getMessage();
+        return false;
+    } finally {
+        $stmt->close();
+        $conn->close();
+    }
+}
+
+function atualizar_dados_usuario($usuario_id, $username, $email, $telefone) {
+    $conn = conectar_banco();
+    try {
+        $stmt = $conn->prepare("UPDATE usuarios SET username = ?, email = ?, telefone = ? WHERE id = ?");
+        $stmt->bind_param("sssi", $username, $email, $telefone, $usuario_id);
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo "Erro ao atualizar dados do usuário: " . $e->getMessage();
+        return false;
+    } finally {
+        $stmt->close();
+        $conn->close();
+    }
+}

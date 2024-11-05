@@ -17,19 +17,31 @@ if (!isset($_SESSION['username'])) {
 </head>
 <body>
     <div class="container text-center mt-5">
-        <h1>Bem-vindo, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-        
-        <div class="d-flex justify-content-center flex-wrap gap-3">
+        <div class="d-flex justify-content-center mb-4">
+            <div class="d-flex justify-content-between align-items-center" style="width: 50%;">
+                <div class="text-start">
+                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalMeuPerfil">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="ms-3 text-end">
+                    <h1>Bem-vindo, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-center flex-wrap gap-3">
             <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalNovoContato">Novo Contato</button>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBuscaContato">Buscar Contato</button>
-            <a href="listar_contatos.php" class="btn btn-primary menu-button">Listar Todos os Contatos</a>
-            <a href="minhas_informacoes.php" class="btn btn-primary menu-button">Meu Perfil</a>
+            <button type="button" class="btn btn-primary menu-button" id="btnListarTodosContatos">Listar Todos os Contatos</button>
             <form action="logout.php" method="post">
                 <button type="submit" class="btn btn-danger menu-button">Logout</button>
             </form>
         </div>
     </div>
-
 
     <div class="modal fade" id="modalNovoContato" tabindex="-1" aria-labelledby="modalNovoContatoLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -38,8 +50,7 @@ if (!isset($_SESSION['username'])) {
                     <h5 class="modal-title" id="modalNovoContatoLabel">Novo Contato</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                </div>
+                <div class="modal-body"></div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
                 </div>
@@ -56,18 +67,43 @@ if (!isset($_SESSION['username'])) {
                 </div>
                 <div class="modal-body">
                     <input type="text" id="campoBuscaContato" class="form-control" placeholder="Digite o nome do contato">
-                    
                     <div id="resultadosBusca" class="mt-3"></div>
-
                     <div id="detalhesContato" class="mt-4" style="display: none;">
                         <h6>Detalhes do Contato</h6>
                         <p><strong>Nome:</strong> <span id="detalheNome"></span></p>
                         <p><strong>Telefone:</strong> <span id="detalheTelefone"></span></p>
                         <p><strong>Email:</strong> <span id="detalheEmail"></span></p>
-                        
                         <button id="editarContato" class="btn btn-primary">Editar</button>
                         <button id="apagarContato" class="btn btn-danger">Apagar</button>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalListarContatos" tabindex="-1" aria-labelledby="modalListarContatosLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalListarContatosLabel">Listar Todos os Contatos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="resultadosListaContatos" class="mt-3" style="max-height: 300px; overflow-y: auto;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalMeuPerfil" tabindex="-1" aria-labelledby="modalMeuPerfilLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalMeuPerfilLabel">Meu Perfil</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
                 </div>
             </div>
         </div>
@@ -78,10 +114,14 @@ if (!isset($_SESSION['username'])) {
     
     <script>
 $(document).ready(function() {
+
+    $('#modalNovoContato').on('show.bs.modal', function() {
+    $('.modal-body', this).load('salvar_contato.html');
+    });
+
     // Função para busca de contatos dinâmica
     $('#campoBuscaContato').on('input', function() {
         let query = $(this).val();
-
         if (query.length > 0) {
             $.ajax({
                 url: 'buscar_contato.php',
@@ -92,31 +132,27 @@ $(document).ready(function() {
                     let html = '';
                     if (response.length > 0) {
                         response.forEach(function(contato) {
-                            html += `
-                                <div class="contact-item" data-id="${contato.id}" data-nome="${contato.nome}" data-telefone="${contato.telefone}" data-email="${contato.email}">
-                                    <strong>${contato.nome}</strong> - ${contato.telefone} - ${contato.email}
-                                </div>`;
+                            html += `<div class="contact-item" data-id="${contato.id}" data-nome="${contato.nome}" data-telefone="${contato.telefone}" data-email="${contato.email}">
+                                        <strong>${contato.nome}</strong> - ${contato.telefone} - ${contato.email}
+                                    </div>`;
                         });
                     } else {
                         html = '<p>Nenhum contato encontrado.</p>';
                     }
                     $('#resultadosBusca').html(html);
 
-                    $('.contact-item').click(function() {
+                    $(document).on('click', '.contact-item', function() {
                         const id = $(this).data('id');
                         const nome = $(this).data('nome');
                         const telefone = $(this).data('telefone');
                         const email = $(this).data('email');
-
                         $('#detalheNome').text(nome);
                         $('#detalheTelefone').text(telefone);
                         $('#detalheEmail').text(email);
                         $('#detalhesContato').show();
-
                         $('#editarContato').off().on('click', function() {
                             window.location.href = `editar_contato.php?id=${id}`;
                         });
-
                         $('#apagarContato').off().on('click', function() {
                             if (confirm('Deseja realmente excluir este contato?')) {
                                 $.ajax({
@@ -146,40 +182,36 @@ $(document).ready(function() {
         }
     });
 
-    $('#modalCadastro').on('show.bs.modal', function(event) {
-        $(this).find('.modal-body').load('cadastro.html');
-    });
-    
-    $('#modalNovoContato').on('show.bs.modal', function(event) {
-        $(this).find('.modal-body').load('salvar_contato.html');
-    });
-
-    $('#formLogin').submit(function(event) {
-        event.preventDefault();
-        var formData = {
-            username: $('#username').val(),
-            senha: $('#password').val()
-        };
-
+    // Listar todos os contatos ao clicar no botão
+    $('#btnListarTodosContatos').click(function() {
         $.ajax({
-            url: 'login.php',
+            url: 'listar_contatos.php',
             type: 'POST',
-            data: formData,
-            dataType: 'json',
             success: function(response) {
-                if (response.status === 'success') {
-                    window.location.href = 'home.php';
+                let contatos = JSON.parse(response);
+                let html = '';
+                if (contatos.length > 0) {
+                    contatos.forEach(function(contato) {
+                        html += `<div class="contact-item" data-id="${contato.id}" data-nome="${contato.nome}" data-telefone="${contato.telefone}" data-email="${contato.email}">
+                                    <strong>${contato.nome}</strong> - ${contato.telefone} - ${contato.email}
+                                    </div>`;
+                    });
                 } else {
-                    alert(response.message);
+                    html = '<p>Nenhum contato encontrado.</p>';
                 }
+                $('#resultadosListaContatos').html(html);
+                $('#modalListarContatos').modal('show');
+                
             },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Erro de comunicação:', textStatus, errorThrown);
-                console.log('Resposta do servidor:', jqXHR.responseText);
-                alert('Erro na comunicação com o servidor: ' + textStatus + ' - ' + errorThrown);
+            error: function() {
+                $('#resultadosListaContatos').html('<p>Erro ao carregar contatos.</p>');
             }
         });
     });
+
+    $('#modalMeuPerfil').on('show.bs.modal', function() {
+            $('.modal-body', this).load('meu_perfil.html');
+        });
 });
 </script>
 </body>
