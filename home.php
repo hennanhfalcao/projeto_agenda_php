@@ -11,34 +11,35 @@ if (!isset($_SESSION['username'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home</title>
+    <title>Agenda Telefonica</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+    body {
+        background-color: #f0ffff;
+    }
+</style>
 </head>
 <body>
-    <div class="container text-center mt-5">
-        <div class="d-flex justify-content-center mb-4">
-            <div class="d-flex justify-content-between align-items-center" style="width: 50%;">
-                <div class="text-start">
-                    <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalMeuPerfil">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
-                            <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
-                        </svg>
-                    </button>
-                </div>
-                <div class="ms-3 text-end">
-                    <h1>Bem-vindo, <?php echo htmlspecialchars($_SESSION['username']); ?>!</h1>
-                </div>
-            </div>
+<div class="container text-center mt-5">
+    <div class="d-flex justify-content-center mb-4">
+        <div class="d-flex justify-content-between align-items-center" style="width: auto;">
+            <h1>Bem-vindo, <?php echo htmlspecialchars(string: strtoupper($_SESSION['username'])); ?>!</h1>
+            <button class="btn btn-primary btn-lg ms-3" data-bs-toggle="modal" data-bs-target="#modalMeuPerfil">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
+                    <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6m2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0m4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z"/>
+                </svg>
+            </button>
         </div>
     </div>
+</div>
 
     <div class="d-flex justify-content-center flex-wrap gap-3">
             <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalNovoContato">Novo Contato</button>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalBuscaContato">Buscar Contato</button>
-            <button type="button" class="btn btn-primary menu-button" id="btnListarTodosContatos">Listar Todos os Contatos</button>
+            <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalBuscaContato">Buscar Contato</button>
+            <button type="button" class="btn btn-primary menu-button" id="btnListarTodosContatos">Listar Contatos</button>
             <form action="logout.php" method="post">
-                <button type="submit" class="btn btn-danger menu-button">Logout</button>
+                <button type="submit" class="btn btn-danger menu-button">Sair</button>
             </form>
         </div>
     </div>
@@ -98,12 +99,13 @@ if (!isset($_SESSION['username'])) {
 
     <div class="modal fade" id="modalMeuPerfil" tabindex="-1" aria-labelledby="modalMeuPerfilLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content" id="modalProfileContent">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalMeuPerfilLabel">Meu Perfil</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body" id="modalProfileContent">
+                    
                 </div>
             </div>
         </div>
@@ -182,7 +184,7 @@ $(document).ready(function() {
         }
     });
 
-    // Listar todos os contatos ao clicar no botão
+
     $('#btnListarTodosContatos').click(function() {
         $.ajax({
             url: 'listar_contatos.php',
@@ -210,7 +212,8 @@ $(document).ready(function() {
     });
 
     $('#modalMeuPerfil').on('show.bs.modal', function() {
-            $('.modal-body', this).load('meu_perfil.html');
+            $('.modal-body', this).load('meu_perfil.php'); {
+            }
         });
 });
 </script>

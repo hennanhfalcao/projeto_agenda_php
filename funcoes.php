@@ -1,5 +1,5 @@
 <?php
-require_once 'conexao.php';
+require_once('conexao.php');
 
 function cadastra_usuario($username, $nome, $senha, $telefone, $email) {
     $conn = conectar_banco();
@@ -103,6 +103,29 @@ function retorna_usuario_id($username) {
     }
 }
 
+function retorna_usuario($usuario_id) {
+    $conn = conectar_banco();
+    try {
+        $stmt = $conn->prepare("SELECT * FROM usuarios WHERE id = ?");
+        $stmt->bind_param("i", $usuario_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            return $result->fetch_assoc(); // Retorna os dados do usuário
+        } else {
+            return null;
+        }
+    } catch (mysqli_sql_exception $e) {
+        echo 'Erro ao obter dados do usuário: ' . $e->getMessage();
+        return null;
+    } finally {
+        $stmt->close();
+        $conn->close();
+    }
+}
+
+
 function buscar_contato_por_nome_e_usuario($nome, $usuario_id) {
     $conn = conectar_banco();
     
@@ -205,21 +228,12 @@ function atualizar_imagem_usuario($usuario_id, $imagem_caminho) {
 
 function atualizar_dados_usuario($usuario_id, $username, $email, $telefone) {
     $conn = conectar_banco();
-    try {
-        $stmt = $conn->prepare("UPDATE usuarios SET username = ?, email = ?, telefone = ? WHERE id = ?");
-        $stmt->bind_param("sssi", $username, $email, $telefone, $usuario_id);
-        $stmt->execute();
+    $stmt = $conn->prepare("UPDATE usuarios SET username = ?, email = ?, telefone = ? WHERE id = ?");
+    $stmt->bind_param("sssi", $username, $email, $telefone, $usuario_id);
+    
+    $resultado = $stmt->execute();
+    $stmt->close();
+    $conn->close();
 
-        if ($stmt->affected_rows > 0) {
-            return true;
-        } else {
-            return false;
-        }
-    } catch (mysqli_sql_exception $e) {
-        echo "Erro ao atualizar dados do usuário: " . $e->getMessage();
-        return false;
-    } finally {
-        $stmt->close();
-        $conn->close();
-    }
+    return $resultado;
 }
