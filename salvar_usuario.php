@@ -9,7 +9,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     // Captura e valida todos os campos de uma vez
     $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
     $nome = filter_input(INPUT_POST, "nome", FILTER_SANITIZE_STRING);
-    $email = filter_var($_POST["email"] ?? null, FILTER_VALIDATE_EMAIL);
+    $email = filter_input(INPUT_POST, var_name:"email", options: FILTER_SANITIZE_EMAIL);
     $senha = filter_input(INPUT_POST, "senha", FILTER_SANITIZE_STRING);
     $telefone = filter_input(INPUT_POST, "telefone", FILTER_SANITIZE_STRING);
 
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
+    $senha_hash = password_hash($senha, algo: PASSWORD_DEFAULT);
 
     $resultado = cadastra_usuario($username, $nome, $senha_hash, $telefone, $email);
 

@@ -8,17 +8,21 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
     />
+    <!-- Adicionar link para os ícones do Bootstrap -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <style>
       body {
         background-color: #f0ffff;
         height: 100vh;
       }
       .login-container {
-        margin-top: 100px; 
-        padding: 30px; 
-        border-radius: 10px;
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        background-color: white
+        max-width: 400px;
+        margin: 50px auto;
+      }
+      .logo {
+        font-size: 2.5rem;
+        color: #0d6efd;
+        margin-bottom: 1rem;
       }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -28,39 +32,53 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 login-container">
-                <h2 class="text-center mb-4">Acesse sua conta</h2>
+                <h2 class="text-center mb-4">
+                    <i class="bi bi-person-circle me-2"></i>Acesse sua conta
+                </h2>
                 <form id="formLogin" class="needs-validation" novalidate>
                     <div class="mb-3">
                         <label for="username" class="form-label">Usuário:</label>
-                        <input
-                          type="text"
-                          class="form-control"
-                          id="username"
-                          name="username"
-                          required
-                        />
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="username"
+                              name="username"
+                              required
+                            />
+                        </div>
                         <div class="invalid-feedback">Por favor, insira seu usuário.</div>
                     </div>
                     <div class="mb-3">
                         <label for="password" class="form-label">Senha:</label>
-                        <input
-                          type="password"
-                          class="form-control"
-                          id="password"
-                          name="senha"
-                          required
-                        />
+                        <div class="input-group">
+                            <span class="input-group-text">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input
+                              type="password"
+                              class="form-control"
+                              id="password"
+                              name="senha"
+                              required
+                            />
+                        </div>
                         <div class="invalid-feedback">Por favor, insira sua senha.</div>
                     </div>
-                    <div class="d-flex justify-content-center gap-2"> <!-- Ajuste aqui -->
-                        <button type="submit" class="btn btn-primary">Entrar</button>
+                    <div class="d-flex justify-content-center gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Entrar
+                        </button>
                         <button
                           type="button"
                           class="btn btn-secondary"
                           data-bs-toggle="modal"
                           data-bs-target="#modalCadastro"
                         >
-                            Criar usuário
+                            <i class="bi bi-person-plus-fill me-2"></i>Criar usuário
                         </button>
                     </div>
                 </form>
@@ -78,7 +96,9 @@
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Cadastro</h5>
+            <h5 class="modal-title" id="exampleModalLabel">
+                <i class="bi bi-person-plus me-2"></i>Cadastro
+            </h5>
             <button
               type="button"
               class="btn-close"
@@ -86,7 +106,64 @@
               aria-label="Close"
             ></button>
           </div>
-          <div class="modal-body"></div>
+          <div class="modal-body">
+            <!-- O conteúdo do cadastro.html deve incluir estes ícones -->
+            <form id="formCadastro" class="needs-validation" novalidate>
+                <div class="mb-3">
+                    <label for="cadastro-username" class="form-label">Usuário:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person-fill"></i>
+                        </span>
+                        <input type="text" class="form-control" id="cadastro-username" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cadastro-nome" class="form-label">Nome:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-person-badge"></i>
+                        </span>
+                        <input type="text" class="form-control" id="cadastro-nome" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cadastro-senha" class="form-label">Senha:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-lock-fill"></i>
+                        </span>
+                        <input type="password" class="form-control" id="cadastro-senha" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cadastro-telefone" class="form-label">Telefone:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-telephone-fill"></i>
+                        </span>
+                        <input type="tel" class="form-control" id="cadastro-telefone" required>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="cadastro-email" class="form-label">Email:</label>
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi bi-envelope-fill"></i>
+                        </span>
+                        <input type="email" class="form-control" id="cadastro-email" required>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="button" class="btn btn-primary" onclick="salvarCadastro()">
+                        <i class="bi bi-save me-2"></i>Salvar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    </button>
+                </div>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -131,37 +208,37 @@
           });
         });
       });
-      
+
       function salvarCadastro() {
         var formData = {
-            username: $('#cadastro-username').val(),
-            nome: $('#cadastro-nome').val(),
-            senha: $('#cadastro-senha').val(),
-            telefone: $('#cadastro-telefone').val(),
-            email: $('#cadastro-email').val()
+          username: $("#cadastro-username").val(),
+          nome: $("#cadastro-nome").val(),
+          senha: $("#cadastro-senha").val(),
+          telefone: $("#cadastro-telefone").val(),
+          email: $("#cadastro-email").val(),
         };
 
         $.ajax({
-            url: 'salvar_usuario.php',
-            type: 'POST',
-            data: formData,
-            dataType: 'json',
-            success: function(response) {
-                console.log(response);
-                if (response.status === 'success') {
-                    alert(response.message);
-                    $('#modalCadastro').modal('hide');
-                } else {
-                    alert(response.message);
-                }
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                console.error('Erro de comunicação:', textStatus, errorThrown);
-                console.log('Resposta do servidor:', jqXHR.responseText);
-                alert('Erro ao cadastrar usuário.');
+          url: "salvar_usuario.php",
+          type: "POST",
+          data: formData,
+          dataType: "json",
+          success: function (response) {
+            console.log(response);
+            if (response.status === "success") {
+              alert(response.message);
+              $("#modalCadastro").modal("hide");
+            } else {
+              alert(response.message);
             }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.error("Erro de comunicação:", textStatus, errorThrown);
+            console.log("Resposta do servidor:", jqXHR.responseText);
+            alert("Erro ao cadastrar usuário.");
+          },
         });
-    }
+      }
     </script>
-</body>
+  </body>
 </html>
