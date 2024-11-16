@@ -59,6 +59,7 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 
+    <!-- Modal: Buscar Contato -->
     <div class="modal fade" id="modalBuscaContato" tabindex="-1" aria-labelledby="modalBuscaContatoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -77,6 +78,24 @@ if (!isset($_SESSION['username'])) {
                         <button id="editarContato" class="btn btn-primary">Editar</button>
                         <button id="apagarContato" class="btn btn-danger">Apagar</button>
                     </div>
+                    <form id="formEditarContato" class="mt-4" style="display: none;">
+                        <h6>Editar Contato</h6>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="editarNome" name="nome" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefone" class="form-label">Telefone</label>
+                            <input type="text" class="form-control" id="editarTelefone" name="telefone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editarEmail" name="email" required>
+                        </div>
+                        <input type="hidden" id="editarId" name="id">
+                        <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                        <button type="button" id="cancelarEdicao" class="btn btn-secondary">Cancelar</button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -152,9 +171,16 @@ $(document).ready(function() {
                         $('#detalheTelefone').text(telefone);
                         $('#detalheEmail').text(email);
                         $('#detalhesContato').show();
-                        $('#editarContato').off().on('click', function() {
-                            window.location.href = `editar_contato.php?id=${id}`;
+                        $('#formEditarContato').hide();
+                        $('#editarContato').off().on('click', function () {
+                            $('#editarNome').val(nome);
+                            $('#editarTelefone').val(telefone);
+                            $('#editarEmail').val(email);
+                            $('#editarId').val(id);
+                            $('#detalhesContato').hide();
+                            $('#formEditarContato').show();
                         });
+
                         $('#apagarContato').off().on('click', function() {
                             if (confirm('Deseja realmente excluir este contato?')) {
                                 $.ajax({
@@ -184,6 +210,30 @@ $(document).ready(function() {
         }
     });
 
+    $('#cancelarEdicao').click(function () {
+        $('#formEditarContato').hide();
+        $('#detalhesContato').show();
+    });
+
+    $('#formEditarContato').submit(function (e) {
+        e.preventDefault();
+
+        const formData = $(this).serialize();
+
+        $.ajax({
+            url: 'atualizar_contato.php',
+            type: 'POST',
+            data: formData,
+            success: function (response) {
+                alert(response.message || 'Contato atualizado com sucesso!');
+                $('#modalBuscaContato').modal('hide');
+                $('#campoBuscaContato').trigger('input');
+            },
+            error: function () {
+                alert('Erro ao atualizar contato.');
+            },
+        });
+    });
 
     $('#btnListarTodosContatos').click(function() {
         $.ajax({

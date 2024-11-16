@@ -155,11 +155,18 @@ function atualizar_contato($id, $nome, $telefone, $email, $usuario_id) {
         $stmt = $conn->prepare("UPDATE contatos SET nome = ?, telefone = ?, email = ? WHERE id = ? AND usuario_id = ?");
         $stmt->bind_param("sssii", $nome, $telefone, $email, $id, $usuario_id);
         $stmt->execute();
-        echo "Contato atualizado com sucesso";
+
+        // Verifica se o contato foi realmente atualizado
+        if ($stmt->affected_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
     } catch (mysqli_sql_exception $e) {
-        echo "Erro ao atualizar contato: " . $e->getMessage();
+        error_log("Erro ao atualizar contato: " . $e->getMessage());
+        return false;
     } finally {
-        if ($stmt) {
+        if (isset($stmt)) {
             $stmt->close();
         }
         $conn->close();
