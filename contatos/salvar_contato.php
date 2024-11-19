@@ -1,6 +1,6 @@
 <?php
-require_once("conexao.php");
-require_once("funcoes.php");
+require_once("../includes/conexao.php");
+require_once("../includes/funcoes.php");
 
 session_start();
 
@@ -26,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 
     if (salvar_contato($nome, $telefone, $email, $usuario_id)) {
-        header("Location: home.php");
+        header("Location: ../usuario/home.php");
         exit;
     } else {
         echo json_encode(["status"=> "error","message"=> "Ocorreu um erro ao cadastrar o contato."]);

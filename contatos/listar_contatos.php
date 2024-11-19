@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'funcoes.php';
+require '../includes/funcoes.php';
 
 if (!isset($_SESSION['usuario_id'])) {
     echo json_encode([]);

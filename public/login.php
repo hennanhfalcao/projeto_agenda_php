@@ -1,10 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-require_once 'conexao.php';
-require_once 'funcoes.php';
+require_once '../includes/conexao.php';
+require_once '../includes/funcoes.php';
 session_start();
 
 header('Content-Type: application/json');

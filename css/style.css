@@ -1,0 +1,45 @@
+.container.text-center {
+  margin-top: 100px;
+}
+
+/* Estilos dos botões */
+.menu-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  transition: transform 0.2s ease-in-out;
+  cursor: pointer;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.menu-button:hover {
+  transform: scale(1.1);
+}
+
+.menu-button i {
+  margin-right: 5px;
+}
+
+/* Estilos dos itens de contato */
+.contact-item {
+  cursor: pointer;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  background-color: #f8f8f8;
+}
+
+.contact-item:hover {
+  background-color: #e0e0e0;
+}
+
+/* Estilos dos modais */
+#modalListarContatos .modal-dialog {
+  max-width: 800px;
+}
+
+#resultadosListaContatos {
+  max-height: 300px;
+  overflow-y: auto;
+}

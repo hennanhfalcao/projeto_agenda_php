@@ -1,7 +1,7 @@
 <?php
 
-require_once('funcoes.php');
-require_once('conexao.php');
+require_once('../includes/funcoes.php');
+require_once('../includes/conexao.php');
 session_start();
 
 if (!isset($_SESSION['username'])) {

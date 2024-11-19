@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json');
-require_once 'conexao.php';
-require_once 'funcoes.php';
+require_once '../includes/conexao.php';
+require_once '../includes/funcoes.php';
 
 session_start();
 

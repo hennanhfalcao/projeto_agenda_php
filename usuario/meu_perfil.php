@@ -1,6 +1,6 @@
 <?php
 session_start();
-require_once 'funcoes.php';
+require_once '../includes/funcoes.php';
 
 $usuario_id = $_SESSION['usuario_id'] ?? null;
 if ($usuario_id) {
@@ -62,7 +62,7 @@ if ($usuario_id) {
                     formData.append('imagem', file);
                     
                     $.ajax({
-                        url: 'atualizar_imagem_perfil.php',
+                        url: './usuario/atualizar_imagem_perfil.php',
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -93,7 +93,7 @@ if ($usuario_id) {
         const formData = $(this).serialize();
         
         $.ajax({
-            url: 'atualizar_perfil.php',
+            url: '../usuario/atualizar_perfil.php',
             type: 'POST',
             data: formData,
             success: function(response) {

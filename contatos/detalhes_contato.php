@@ -1,6 +1,6 @@
 <?php
-require_once 'conexao.php';
-require_once 'funcoes.php';
+require_once '../includes/conexao.php';
+require_once '../includes/funcoes.php';
 
 if (isset($_GET['id'])) {
     $contato_id = $_GET['id'];
@@ -20,8 +20,8 @@ if (isset($_GET['id'])) {
             <p><strong>Telefone:</strong> {$contato['telefone']}</p>
             <p><strong>Email:</strong> {$contato['email']}</p>
             <div class='d-flex gap-2'>
-                <a href='editar_contato.php?id={$contato['id']}' class='btn btn-primary'>Editar</a>
-                <a href='apagar_contato.php?id={$contato['id']}' class='btn btn-danger'>Apagar</a>
+                <a href='../contatos/editar_contato.php?id={$contato['id']}' class='btn btn-primary'>Editar</a>
+                <a href='../contatos/apagar_contato.php?id={$contato['id']}' class='btn btn-danger'>Apagar</a>
             </div>";
         
     } else {
@@ -37,20 +37,20 @@ if (isset($_GET['id'])) {
     echo " <script>
             $('#editarContato').on('click', function() {
                 const id = $(this).data('id');
-                window.location.href = 'editar_contato.php?id=' + id;
+                window.location.href = '../contatos/editar_contato.php?id=' + id;
             });
 
             $('#apagarContato').on('click', function() {
                 const id = $(this).data('id');
                 if (confirm('Deseja realmente excluir este contato?')) {
                     $.ajax({
-                        url: 'apagar_contato.php',
+                        url: '../contatos/apagar_contato.php',
                         type: 'POST',
                         data: { id: id },
                         success: function(res) {
                             const response = JSON.parse(res);
                             alert(response.message || 'Contato excluído com sucesso');
-                            window.location.href = 'home.php';
+                            window.location.href = '../usuario/home.php';
                         },
                         error: function() {
                             alert('Erro ao excluir o contato.');
@@ -64,7 +64,7 @@ if (isset($_GET['id'])) {
                 const formData = $(this).serialize();
                 
                 $.ajax({
-                    url: 'atualizar_contato.php',
+                    url: '../contatos/atualizar_contato.php',
                     type: 'POST',
                     data: formData,
                     success: function(response) {

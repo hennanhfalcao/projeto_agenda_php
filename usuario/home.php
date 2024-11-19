@@ -1,9 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['username'])) {
-    header('Location: index.html');
+    header('Location: ../public/index.html');
     exit;
 }
+include '../header.php';
 ?>
 
 <!DOCTYPE html>
@@ -11,14 +12,9 @@ if (!isset($_SESSION['username'])) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Telefonica</title>
+    <title>Nexus</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-    body {
-        background-color: #f0ffff;
-    }
-</style>
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
 <div class="container text-center mt-5">
@@ -34,15 +30,22 @@ if (!isset($_SESSION['username'])) {
     </div>
 </div>
 
-    <div class="d-flex justify-content-center flex-wrap gap-3">
-            <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalNovoContato">Novo Contato</button>
-            <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalBuscaContato">Buscar Contato</button>
-            <button type="button" class="btn btn-primary menu-button" id="btnListarTodosContatos">Listar Contatos</button>
-            <form action="logout.php" method="post">
-                <button type="submit" class="btn btn-danger menu-button">Sair</button>
-            </form>
-        </div>
-    </div>
+<div class="d-flex justify-content-center flex-wrap gap-3">
+    <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalNovoContato">
+        <i class="bi bi-person-plus"></i> Novo Contato
+    </button>
+    <button type="button" class="btn btn-primary menu-button" data-bs-toggle="modal" data-bs-target="#modalBuscaContato">
+        <i class="bi bi-search"></i> Buscar Contato
+    </button>
+    <button type="button" class="btn btn-primary menu-button" id="btnListarTodosContatos">
+        <i class="bi bi-list-ul"></i> Listar Contatos
+    </button>
+    <form action="../usuario/logout.php" method="post">
+        <button type="submit" class="btn btn-danger menu-button">
+            <i class="bi bi-box-arrow-right"></i> Sair
+        </button>
+    </form>
+</div>
 
     <div class="modal fade" id="modalNovoContato" tabindex="-1" aria-labelledby="modalNovoContatoLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -130,6 +133,8 @@ if (!isset($_SESSION['username'])) {
         </div>
     </div>
 
+<?php include '../footer.php'; ?>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     
@@ -137,7 +142,7 @@ if (!isset($_SESSION['username'])) {
 $(document).ready(function() {
 
     $('#modalNovoContato').on('show.bs.modal', function() {
-    $('.modal-body', this).load('salvar_contato.html');
+    $('.modal-body', this).load('../contatos/salvar_contato.html');
     });
 
     // Função para busca de contatos dinâmica
@@ -145,7 +150,7 @@ $(document).ready(function() {
         let query = $(this).val();
         if (query.length > 0) {
             $.ajax({
-                url: 'buscar_contato.php',
+                url: '../contatos/buscar_contato.php',
                 type: 'POST',
                 data: { nome: query },
                 dataType: 'json',
@@ -184,7 +189,7 @@ $(document).ready(function() {
                         $('#apagarContato').off().on('click', function() {
                             if (confirm('Deseja realmente excluir este contato?')) {
                                 $.ajax({
-                                    url: 'apagar_contato.php',
+                                    url: '../contatos/apagar_contato.php',
                                     type: 'POST',
                                     data: { id: id },
                                     success: function(res) {
@@ -221,23 +226,25 @@ $(document).ready(function() {
         const formData = $(this).serialize();
 
         $.ajax({
-            url: 'atualizar_contato.php',
+            url: '../contatos/atualizar_contato.php',
             type: 'POST',
             data: formData,
             success: function (response) {
                 alert(response.message || 'Contato atualizado com sucesso!');
-                $('#modalBuscaContato').modal('hide');
-                $('#campoBuscaContato').trigger('input');
+                $('#modalBuscaContato').modal('hide'); 
             },
             error: function () {
                 alert('Erro ao atualizar contato.');
             },
+            complete: function() {
+                window.location.href = '../usuario/home.php'; 
+            }
         });
     });
 
     $('#btnListarTodosContatos').click(function() {
         $.ajax({
-            url: 'listar_contatos.php',
+            url: '../contatos/listar_contatos.php',
             type: 'POST',
             success: function(response) {
                 let contatos = JSON.parse(response);
@@ -262,7 +269,7 @@ $(document).ready(function() {
     });
 
     $('#modalMeuPerfil').on('show.bs.modal', function() {
-            $('.modal-body', this).load('meu_perfil.php'); {
+            $('.modal-body', this).load('../usuario/meu_perfil.php'); {
             }
         });
 });

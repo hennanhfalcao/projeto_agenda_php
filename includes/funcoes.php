@@ -1,5 +1,5 @@
 <?php
-require_once('conexao.php');
+require_once('../includes/conexao.php');
 
 function cadastra_usuario($username, $nome, $senha, $telefone, $email) {
     $conn = conectar_banco();

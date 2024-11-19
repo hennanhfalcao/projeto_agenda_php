@@ -1,6 +1,6 @@
 <?php
-require_once('funcoes.php');
-require_once('conexao.php');
+require_once('../includes/funcoes.php');
+require_once('../includes/conexao.php');
 session_start();
 
 if (!isset($_SESSION['usuario_id'])) {
@@ -60,12 +60,12 @@ $('#formEditarContato').on('submit', function(e) {
     const formData = $(this).serialize();
     
     $.ajax({
-        url: 'atualizar_contato.php',
+        url: '../contatos/atualizar_contato.php',
         type: 'POST',
         data: formData,
         success: function(response) {
             alert(response.message || 'Contato atualizado com sucesso!');
-            window.location.href = 'home.php'; // Redireciona após a atualização
+            window.location.href = '../usuario/home.php'; // Redireciona após a atualização
         },
         error: function() {
             alert('Erro ao atualizar contato.');
