@@ -34,6 +34,7 @@ function verificar_usuario($username, $senha) {
         $conn->close();
     }
 }
+
 function salvar_contato($nome, $telefone, $email, $usuario_id) {
     $conn = conectar_banco();
     try {
@@ -48,34 +49,6 @@ function salvar_contato($nome, $telefone, $email, $usuario_id) {
         if ($stmt) {
             $stmt->close();
         }
-        $conn->close();
-    }
-}
-
-##função que busca e retorna o id do contato por meio do nome.
-function retorna_id($nome, $usuario_id) {
-    $conn = conectar_banco();
-    try {
-        $stmt = $conn->prepare("SELECT id FROM contatos WHERE nome LIKE ? AND usuario_id = ?");
-        $nome_wildcard = "%nome%";
-        $stmt->bind_param("si", $nome_wildcard, $usuario_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-
-        #Se o usuário for encontrado, retorna
-        if ($result->num_rows > 0) {
-            #recebe a tupla com o contato 
-            $row = $result ->fetch_assoc();
-            #retorna o id do contato
-            return $row['id'];
-        } else {
-            return false;
-        }
-    } catch(mysqli_sql_exception $e) {
-        echo 'Erro ao buscar ID do contato: '. $e->getMessage();
-        return false;
-    } finally {
-        $stmt->close();
         $conn->close();
     }
 }
@@ -192,9 +165,6 @@ function apagar_contato($id, $usuario_id) {
         $conn->close();
     }
 }
-
-##importante criar páginas para solicitar as informações as quais iremos usar nas funções de editar e apagar
-#caso exista contatos, a função os mostra em uma tabela no html
 
 function listar_contatos_usuario($usuario_id) {
     $conn = conectar_banco();

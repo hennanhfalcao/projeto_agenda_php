@@ -62,7 +62,6 @@ include '../header.php';
         </div>
     </div>
 
-    <!-- Modal: Buscar Contato -->
     <div class="modal fade" id="modalBuscaContato" tabindex="-1" aria-labelledby="modalBuscaContatoLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -145,7 +144,6 @@ $(document).ready(function() {
     $('.modal-body', this).load('../contatos/salvar_contato.html');
     });
 
-    // Função para busca de contatos dinâmica
     $('#campoBuscaContato').on('input', function() {
         let query = $(this).val();
         if (query.length > 0) {

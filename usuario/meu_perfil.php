@@ -27,7 +27,7 @@ if ($usuario_id) {
         
         <div class="mb-3">
             <label for="username" class="form-label">Nome de Usuário</label>
-            <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>">
+            <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
         </div>
         
         <div class="mb-3">
@@ -57,7 +57,6 @@ if ($usuario_id) {
                 reader.onload = function(e) {
                     document.getElementById('imgPerfil').src = e.target.result;
                     
-                    // Enviar a imagem para o servidor
                     const formData = new FormData();
                     formData.append('imagem', file);
                     

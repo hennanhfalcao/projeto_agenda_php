@@ -73,12 +73,11 @@
             }
         }
 
-        /* Footer */
         footer {
             background-color: #fff;
             color: #000;
             padding: 20px 0;
-            margin-top: auto; /* Footer fixo na parte inferior */
+            margin-top: auto;
         }
 
         .footer-content {
