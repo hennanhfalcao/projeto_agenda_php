@@ -16,10 +16,7 @@
       <ul class="list-unstyled">
         <li><i class="bi bi-check-circle-fill text-primary"></i> Interface intuitiva e fácil de usar</li>
         <li><i class="bi bi-check-circle-fill text-primary"></i> Busca rápida e eficiente</li>
-        <li><i class="bi bi-check-circle-fill text-primary"></i> Organização de contatos por grupos</li>
-        <li><i class="bi bi-check-circle-fill text-primary"></i> Lembretes de aniversários</li>
-        <li><i class="bi bi-check-circle-fill text-primary"></i> Integração com redes sociais</li>
-        <li><i class="bi bi-check-circle-fill text-primary"></i> E muito mais!</li>
+        <li><i class="bi bi-check-circle-fill text-primary"></i> Dashboard de usuário</li>
       </ul>
     </div>
     <div class="col-md-6">
