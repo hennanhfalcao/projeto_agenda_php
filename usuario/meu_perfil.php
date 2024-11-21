@@ -62,7 +62,7 @@ if ($usuario_id) {
                     formData.append('imagem', file);
                     
                     $.ajax({
-                        url: './usuario/atualizar_imagem_perfil.php',
+                        url: '../usuario/atualizar_imagem_perfil.php',
                         type: 'POST',
                         data: formData,
                         contentType: false,
@@ -83,7 +83,6 @@ if ($usuario_id) {
                 reader.readAsDataURL(file);
             }
         };
-        
         inputFile.click();
     };
 
@@ -100,6 +99,7 @@ if ($usuario_id) {
                 const res = JSON.parse(response);
                 alert(res.message || 'Perfil atualizado com sucesso!');
                 $('#modalMeuPerfil').modal('hide');
+                window.location.href = '../usuario/home.php';
             },
             error: function() {
                 alert('Erro ao atualizar perfil.');
